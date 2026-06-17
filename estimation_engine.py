@@ -3,18 +3,17 @@ import openpyxl
 import os
 
 def load_input_data(filename="積算入力シート.xlsx"):
-    """入力用Excelから基本情報を読み込む"""
     df = pd.read_excel(filename, sheet_name='基本情報・フリーザー仕様')
     return dict(zip(df['項目名'], df['入力欄']))
 
 def fetch_unit_price(db_df, item_name, spec):
     """
     マニュアルDBから単価を検索して取得する関数
-    ※実際の列名（名    称, 摘    要など）に合わせて検索します
+    ※実際の列名（名称, 摘要など）に合わせて検索します
     """
     try:
         # 名称と摘要（仕様）が部分一致する行を検索
-        # ※実際のDBファイルの列名に合わせて '名    称' や '摘    要' を調整してください
+        # ※実際のDBファイルの列名に合わせて '名称' や '摘要' を調整してください
         mask = db_df.iloc[:, 1].astype(str).str.contains(item_name, na=False) & \
                db_df.iloc[:, 2].astype(str).str.contains(spec, na=False)
         result = db_df[mask]
